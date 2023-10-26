@@ -2,6 +2,7 @@ package net.javaguides.springboot.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import net.javaguides.springboot.model.Employee;
 import net.javaguides.springboot.service.EmployeeService;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
     public EmployeeController(EmployeeService employeeService) {
         super();
         this.employeeService = employeeService;
@@ -40,7 +41,6 @@ public class EmployeeController {
         return new ResponseEntity<Employee>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
     }
     // build update employee REST API
-    // http://localhost:8080/api/employees/1
     @PutMapping("{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable("id") long id,@RequestBody Employee employee){
         return new ResponseEntity<Employee>(employeeService.updateEmployee(employee, id), HttpStatus.OK);
@@ -52,5 +52,14 @@ public class EmployeeController {
         // delete employee from DB
         employeeService.deleteEmployee(id);
         return new ResponseEntity<String>("Employee deleted successfully!.", HttpStatus.OK);
+    }
+
+    // build send all employees to employee.html
+    // http://localhost:8080/api/employees/list
+    @GetMapping("/list")
+    public ModelAndView listEmployees(Model model) {
+        List<Employee> employees = employeeService.getAllEmployees();
+        model.addAttribute("employees", employees);
+        return new ModelAndView("employee");
     }
 }

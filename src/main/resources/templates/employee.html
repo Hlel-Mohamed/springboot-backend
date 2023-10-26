@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/css/styles.css" rel="stylesheet">
+    <title>Liste Employees</title>
+</head>
+<body>
+    <h1>Liste Employees</h1>
+    <table border="1">
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+        <tr th:each="student: ${employees}">
+            <td th:text="${student.getId()}"></td>
+            <td th:text="${student.getFirstName()}"></td>
+            <td th:text="${student.getLastName()}"></td>
+            <td th:text="${student.getEmail()}"></td>
+        </tr>
+    </table>
+</body>
+</html>
